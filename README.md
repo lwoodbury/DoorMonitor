@@ -23,6 +23,7 @@ Do we need a manual reset from web page if it goes wrong?
 #### Luke Woodbury 14th November 2025
 
 # Use: 
+Put the html file in 'Web Page' folder on the SD card  
 You will need to set a password in the WiFinWeb code and use that to connect to the wifi access point that is set up  
-To connect to the WiFi access point, connect to the DoorMonitor-AP from a computer or mobile device, go to the wifi settings and type the IP for 'Default Gateway' in a browser, e.g, 192.168.4.1
+To connect to the WiFi access point, connect to the DoorMonitor-AP from a computer or mobile device, go to the wifi settings and type the IP for 'Default Gateway' into a browser, e.g, 192.168.4.1
 NB - this should not be considered as a secure connection and only used for non-sensitive data!!! 
