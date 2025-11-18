@@ -10,7 +10,7 @@ void deleteFile();
 
 // Replace with your network credentials
 const char* ssid     = "DoorMonitor-AP";
-const char* password = "42069247";
+const char* password = "********";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
