@@ -13,7 +13,7 @@ unsigned long lastB1Change = 0;
 unsigned long lastB2Change = 0;
 
 long peopleCount = 0;
-long totalCount = 0;        // total count for the day
+long dailyCount = 0;        // total count for the day
 
 // --- Crossing states ---
 enum CrossState { IDLE, B1_ACTIVE, B2_ACTIVE, ENTRY_PENDING, EXIT_PENDING };
@@ -80,7 +80,7 @@ void updatePeopleCount() {
     case ENTRY_PENDING:
       if (B1_clear && B2_clear) {
         peopleCount++;
-        totalCount++;
+        dailyCount++;
         Serial.print("Entry detected. Current count: ");
         Serial.println(peopleCount);
         state = IDLE;

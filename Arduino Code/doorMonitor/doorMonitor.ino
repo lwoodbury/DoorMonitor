@@ -2,15 +2,20 @@
 * Uses an IR gate to count people in a room
 * Uses RTC to keep track of real time
 * Logs the data to an SD card
+*   - keeps a current total and a daily total as a single text file
+*   - keeps a daily backup file and resets variables at midnight
 * Creates a WiFi Access point and serves a web page with access to data file
-* Also stores persistent variables for peopleCount and totalCount on the SD
+* Also stores persistent variables for peopleCount and dailyCount on the SD
 * and reloads on startup in case of powercycle
 *
 * TODO: 
-* Do we clear the log and persistent vars every midnight and create a new file? 
-* Easier to load data into spreadsheet if we keep same file, maybe we have a daily total? 
+Log data hourly
+What about time drift? Is it significant? How do we reset it? Just plug it into a computer occasionally and sketch can do?
+How long before the SD fills up?
+Do we need a manual reset from web page if it goes wrong? 
+Do we want a file explorer rather than a single dowload button on web page
 *
-* Luke Woodbury 11th November 2025
+* Luke Woodbury 14th November 2025
 */
 
 
@@ -33,7 +38,9 @@ void RTCsetup();
 
 //Data logging string and persistent variables
 String dataMessage;
-String varStore; 
+String varStore;
+String dailyBackupFilename;
+String dailyBackupMessage;
 
 // Timer variables
 unsigned long lastTime = 0;
@@ -64,15 +71,19 @@ void loop() {
 
   if ((millis() - lastTime) > timerDelay) {
       DateTime now = rtc.now();
-      humanDay = daysOfTheWeek[now.dayOfTheWeek()];
+      char* humanDay = daysOfTheWeek[now.dayOfTheWeek()];
+      int hour = now.hour();
+      int minute = now.minute();
 
       //humanTime = String(now.year(), DEC) + "/" + String(now.month(), DEC) + "/" + String(now.day(), DEC) + " " + String(humanDay);
       
       // Log the current and total counts and save persistent variables
-      //dataMessage = String(humanTime) + ", Current: " + String(peopleCount) + ", Total: " + String(totalCount) + "\r\n";
-      dataMessage = now.timestamp(DateTime::TIMESTAMP_DATE) + " " + now.timestamp(DateTime::TIMESTAMP_TIME) + " " + String(humanDay) +  " Current: " + String(peopleCount) + " Total: " + String(totalCount) + "\r\n";
-      varStore = "Vars: " + String(peopleCount) + " " + String(totalCount) + " ";
-      
+      //dataMessage = String(humanTime) + ", Current: " + String(peopleCount) + ", Total: " + String(dailyCount) + "\r\n";
+      dataMessage = now.timestamp(DateTime::TIMESTAMP_DATE) + " " + now.timestamp(DateTime::TIMESTAMP_TIME) + " " + String(humanDay) +  " Current: " + String(peopleCount) + " DailyTotal: " + String(dailyCount) + "\r\n";
+      varStore = "Vars: " + String(peopleCount) + " " + String(dailyCount) + " ";
+      dailyBackupFilename = "/" + now.timestamp(DateTime::TIMESTAMP_DATE) + "_backup";
+      dailyBackupMessage = now.timestamp(DateTime::TIMESTAMP_DATE) + " " + now.timestamp(DateTime::TIMESTAMP_TIME) + " " + String(humanDay) +  " Current: " + String(peopleCount) + " DailyTotal: " + String(dailyCount) + "\r\n";
+
       Serial.print("Saving data: ");
       //Serial.println(dataMessage);
 
@@ -83,11 +94,24 @@ void loop() {
       Serial.print(varStore);
       writeFile(SD, "/var.txt", varStore.c_str());
 
+  // Save a daily backup file at midnight and reset variables
+  if (hour == 13 && minute > 00) {
+    if (!midnightDoneToday) {
+      midnightDoneToday = true;
+
+      Serial.println("Running midnight job!");
+      writeFile(SD, dailyBackupFilename.c_str(), dailyBackupMessage.c_str());
+      peopleCount = 0;
+      dailyCount = 0;
+
+    }
+  } else {
+    midnightDoneToday = false;
+  }
+
       lastTime = millis();
   }
 }
-
-
 
 
 

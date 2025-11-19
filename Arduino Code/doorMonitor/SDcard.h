@@ -79,9 +79,9 @@ void updateVars(fs::FS &fs, const char * path){
       peopleCount = file.parseInt();
       Serial.print("peopleCount: ");
       Serial.println(peopleCount);
-      totalCount = file.parseInt();
-      Serial.print("totalCount: ");
-      Serial.println(totalCount);      
+      dailyCount = file.parseInt();
+      Serial.print("dailyCount: ");
+      Serial.println(dailyCount);      
 
       Serial.println("Vars read");
       file.close();
