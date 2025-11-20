@@ -7,6 +7,7 @@ void initSDCard();
 void writeFile();
 void appendFile();
 void deleteFile();
+void renameFile();
 
 // Replace with your network credentials
 const char* ssid     = "DoorMonitor-AP";
