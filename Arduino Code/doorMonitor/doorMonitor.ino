@@ -4,18 +4,17 @@
 * Logs the data to an SD card
 *   - keeps a current total and a daily total as a single text file
 *   - keeps a daily backup file and resets variables at midnight
-* Creates a WiFi Access point and serves a web page with access to data file
+* Creates a WiFi Access point and serves a web page with access to data files 
+    - Need WPA auth to connect to SSID so is secure
+    - click on file to download
+    - files presented as browser with delete button next to them
 * Also stores persistent variables for peopleCount and dailyCount on the SD
 * and reloads on startup in case of powercycle
 *
 * TODO: 
-Have renamed daily file for backup, which is fine, but then this recreates data.txt as new. 
-Really want to leave main one intact and just get daily. Maybe keep a daily and a main data.txt and rename daily and restart at midnight?
-Log data hourly
 What about time drift? Is it significant? How do we reset it? Just plug it into a computer occasionally and sketch can do?
 How long before the SD fills up?
 Do we need a manual reset from web page if it goes wrong? 
-Do we want a file explorer rather than a single dowload button on web page
 Print time and ability to set on web page, call RTCsetup()?
 *
 * Luke Woodbury 14th November 2025
