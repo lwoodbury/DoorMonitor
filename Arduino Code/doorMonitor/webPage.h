@@ -3,6 +3,7 @@ const char fileBrowserPage[] PROGMEM = R"rawliteral(
 <html>
 <body>
 <h2>Door Monitor File Browser</h2>
+<h3><p>Time at last page refresh: %TIME%</p></h3>
 <div id="list"></div>
 
 <script>

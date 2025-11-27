@@ -10,6 +10,9 @@ void appendFile();
 void deleteFile();
 void renameFile();
 
+#include <RTCbitz.h>
+void RTCsetup();
+
 // Replace with your network credentials
 const char* ssid     = "DoorMonitor-AP";
 const char* password = "42069247";
@@ -19,6 +22,14 @@ AsyncWebServer server(80);
 
 // Variable to store the HTTP request
 String header;
+
+String processor(const String& var) {
+  if (var == "TIME") {
+    DateTime now = rtc.now();
+    return now.timestamp(DateTime::TIMESTAMP_TIME); // HH:MM:SS
+  }
+  return String();
+}
 
 void WiFisetup(){
   // Connect to Wi-Fi network with SSID and password
@@ -64,7 +75,7 @@ void webServerSetup(){
 
   // Serve file browser page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/html", fileBrowserPage);
+    request->send_P(200, "text/html", fileBrowserPage, processor);
   });
 
   // Return file list as plain text: "filename,size"

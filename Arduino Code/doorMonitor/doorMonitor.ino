@@ -36,8 +36,8 @@ void appendFile();
 void deleteFile();
 void renameFile();
 */
-#include <RTCbitz.h>
-void RTCsetup();
+//#include <RTCbitz.h>
+//void RTCsetup();
 
 //Data logging string and persistent variables
 String dataMessage;
@@ -49,6 +49,7 @@ String dailyBackupMessage;
 // Timer variables
 unsigned long lastTime = 0;
 unsigned long timerDelay = 30000;
+
 
 void setup() {
   Serial.begin(115200);
