@@ -48,7 +48,7 @@ String dailyBackupMessage;
 
 // Timer variables
 unsigned long lastTime = 0;
-unsigned long timerDelay = 30000;
+unsigned long timerDelay = 3600000;
 
 
 void setup() {
@@ -106,7 +106,7 @@ void loop() {
       writeFile(SD, "/var.txt", varStore.c_str());
 
   // Save a daily backup file at midnight and reset variables
-  if (hour == 11 && minute >= 00) {
+  if (hour == 00 && minute >= 00) {
     if (!midnightDoneToday) {
       midnightDoneToday = true;
 
