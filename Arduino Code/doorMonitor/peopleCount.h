@@ -2,6 +2,13 @@
 const int PIN_B1 = 32;
 const int PIN_B2 = 14;
 
+//LED stuff
+unsigned long LEDStartClock = 0;
+unsigned long LEDtimerDelay = 150;
+const int g_LED = 13;
+const int r_LED = 12;
+bool LEDState = 0;
+
 // --- Timing constants ---
 const unsigned long DEBOUNCE_MS = 40;   // ignore short glitches
 
@@ -38,6 +45,13 @@ bool isBeamBroken(int pin, int &lastState, unsigned long &lastChange) {
   return false;
 }
 
+void peopleCountSetup(){
+  pinMode(PIN_B1, INPUT);
+  pinMode(PIN_B2, INPUT);
+  pinMode(r_LED, OUTPUT);
+  pinMode(g_LED, OUTPUT);
+}
+
 // Non-blocking beam released
 bool isBeamClear(int pin, int &lastState, unsigned long &lastChange) {
   int current = digitalRead(pin);
@@ -56,6 +70,15 @@ bool isBeamClear(int pin, int &lastState, unsigned long &lastChange) {
 
 
 void updatePeopleCount() {
+  if (LEDState == 1){
+      if ((millis() - LEDStartClock) > LEDtimerDelay){
+        digitalWrite(g_LED, LOW);
+        digitalWrite(r_LED, LOW);
+        LEDState = 0;
+        }
+  }
+
+
   bool B1 = isBeamBroken(PIN_B1, lastB1State, lastB1Change);
   bool B2 = isBeamBroken(PIN_B2, lastB2State, lastB2Change);
   bool B1_clear = isBeamClear(PIN_B1, lastB1State, lastB1Change);
@@ -81,6 +104,9 @@ void updatePeopleCount() {
       if (B1_clear && B2_clear) {
         peopleCount++;
         dailyCount++;
+        digitalWrite(g_LED, HIGH);
+        LEDStartClock = millis();
+        LEDState = 1;
         Serial.print("Entry detected. Current count: ");
         Serial.println(peopleCount);
         state = IDLE;
@@ -90,6 +116,9 @@ void updatePeopleCount() {
     case EXIT_PENDING:
       if (B1_clear && B2_clear) {
         peopleCount = max(0L, peopleCount - 1);
+        digitalWrite(r_LED, HIGH);
+        LEDStartClock = millis();
+        LEDState = 1; 
         Serial.print("Exit detected. Current count: ");
         Serial.println(peopleCount);
         state = IDLE;

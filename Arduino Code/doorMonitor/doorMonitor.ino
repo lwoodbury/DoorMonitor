@@ -15,7 +15,7 @@
 What about time drift? Is it significant? How do we reset it? Just plug it into a computer occasionally and sketch can do?
 How long before the SD fills up?
 Do we need a manual reset from web page if it goes wrong? 
-Print time and ability to set on web page, call RTCsetup()?
+Ability to set time on web page, call RTCsetup()?
 *
 * Luke Woodbury 14th November 2025
 */
@@ -24,6 +24,7 @@ Print time and ability to set on web page, call RTCsetup()?
 
 #include <peopleCount.h>
 void updatePeopleCount();
+void peopleCountSetup();
 
 #include <WiFiNWeb.h>
 void WiFisetup();
@@ -55,9 +56,7 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
 
-  pinMode(PIN_B1, INPUT);
-  pinMode(PIN_B2, INPUT);
-
+  peopleCountSetup();
   RTCsetup();
   WiFisetup();
   initSDCard();
