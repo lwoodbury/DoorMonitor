@@ -14,8 +14,8 @@ void renameFile();
 void RTCsetup();
 
 // Replace with your network credentials
-const char* ssid     = "DoorMonitor-AP";
-const char* password = "42069247";
+const char* ssid     = "DoorMonitor1-AP";
+const char* password = "DM1-AP-Count0";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);

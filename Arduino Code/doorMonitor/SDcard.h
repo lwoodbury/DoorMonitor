@@ -56,7 +56,6 @@ void appendFile(fs::FS &fs, const char * path, const char * message) {
   File file = fs.open(path, FILE_APPEND);
   if(!file) {
     Serial.println("Failed to open file for appending, creating new");
-    //Serial.println("Failed to open file for appending, creating new");
     return;
   }
   if(file.print(message)) {
@@ -70,7 +69,8 @@ void appendFile(fs::FS &fs, const char * path, const char * message) {
 void updateVars(fs::FS &fs, const char * path){
   File file = fs.open(path, FILE_READ);
   if(!file) {
-    Serial.println("Failed to open file for reading vars");
+    Serial.println("Failed to open file for reading vars, creating new");
+    writeFile(SD, "/var.txt", "Vars: 0 0 ");
     return;
   }
   if (file) {
