@@ -58,6 +58,12 @@ void setup() {
 
   peopleCountSetup();
   RTCsetup();
+  DateTime now = rtc.now();
+  int hour = now.hour();
+  int minute = now.minute();
+  Serial.print(hour);
+  Serial.print(":");
+  Serial.println(minute);
   WiFisetup();
   initSDCard();
   webServerSetup();
